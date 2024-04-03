@@ -30,7 +30,7 @@ const TextArea: React.FC = () => {
 
     return (
         <div className="bg-neutral-800 p-10 h-1/2">
-            <div className="container mx-auto  h-full">
+            <div className="container mx-auto duration-300 h-full">
                 <Toaster position="top-center" reverseOrder={false} />
                 <div className="right-10 -mt-6 mb-2 ms-auto flex h-10 max-w-fit items-center gap-3 rounded-lg ">
                     <select
