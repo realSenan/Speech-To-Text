@@ -20,3 +20,7 @@
 .icon {
     font-size: clamp(76px, 1em, 100px);
 }
+
+body {
+    overflow-x: hidden;
+}

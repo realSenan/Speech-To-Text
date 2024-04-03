@@ -1,27 +1,28 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useContext } from 'react'
 import { MdMic, MdMicOff } from 'react-icons/md'
+import { TranscriptContext } from '../App'
 
 const VoiceArea: React.FC = () => {
     const [isRecording, setIsRecording] = useState(false)
-    const [transcript, setTranscript] = useState('')
     const micEl = useRef<HTMLButtonElement | null>(null)
-    const recognitionRef = useRef<SpeechRecognition | null>(null)
+    const recognitionRef = useRef<null | SpeechRecognition>(null)
+    const { setTranscript } = useContext(TranscriptContext)
 
     useEffect(() => {
-        recognitionRef.current = new (window as any).webkitSpeechRecognition()
+        recognitionRef.current = new window.webkitSpeechRecognition()
         recognitionRef.current.continuous = true
         recognitionRef.current.interimResults = true
-        recognitionRef.current.onresult = (event: any) => {
+        recognitionRef.current.onresult = (event: SpeechRecognitionEvent) => {
             for (let i = event.resultIndex; i < event.results.length; ++i) {
                 if (event.results[i].isFinal) {
                     setTranscript(
                         (prevTranscript) =>
-                            prevTranscript + event.results[i][0].transcript
+                            prevTranscript + ' ' + event.results[i][0].transcript
                     )
                 }
             }
         }
-    }, [])
+    }, [setTranscript])
 
     const micHandler = () => {
         if (!isRecording) {
@@ -31,12 +32,6 @@ const VoiceArea: React.FC = () => {
         }
         setIsRecording((prev) => !prev)
     }
-
-    useEffect(() => {
-        return () => {
-            recognitionRef.current?.stop()
-        }
-    }, [])
 
     return (
         <section className="flex h-1/2 items-center justify-center text-3xl">
@@ -51,7 +46,6 @@ const VoiceArea: React.FC = () => {
                     <MdMicOff className="icon transition-none duration-0" />
                 )}
             </button>
-            <p>{transcript}</p>
         </section>
     )
 }
