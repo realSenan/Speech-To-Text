@@ -1,6 +1,14 @@
+/// <reference types="webspeechapi" />
+
 import { useContext, useEffect, useRef, useState } from 'react'
 import { HiOutlineMicrophone, HiOutlineStop } from 'react-icons/hi2'
 import { LangContext, SpeechStatus, TranscriptContext } from '../App'
+
+declare global {
+    interface Window {
+        webkitSpeechRecognition?: SpeechRecognitionStatic
+    }
+}
 
 const waveformHeights = [
     18, 30, 22, 42, 27, 55, 34, 65, 40, 76, 48, 62, 33, 72, 44, 58, 28, 68,
@@ -155,7 +163,12 @@ const VoiceArea: React.FC<VoiceAreaProps> = ({
     }
 
     const startRecognition = (language: string) => {
-        const recognition = new window.webkitSpeechRecognition()
+        const SpeechRecognition = window.webkitSpeechRecognition
+        if (!SpeechRecognition) {
+            throw new Error('Speech recognition is not supported in this browser.')
+        }
+
+        const recognition = new SpeechRecognition()
         recognition.continuous = true
         recognition.interimResults = true
         recognition.lang = language

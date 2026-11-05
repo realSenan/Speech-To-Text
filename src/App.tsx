@@ -27,14 +27,14 @@ export const LangContext = createContext<{
     lang: string
     setLang: React.Dispatch<React.SetStateAction<string>>
 }>({
-    lang: 'az-AZ',
+    lang: 'en-US',
     setLang: () => {},
 })
 
 function App() {
     const [transcript, setTranscript] = useState('')
     const [replaceNextWord, setReplaceNextWord] = useState(false)
-    const [lang, setLang] = useState('az-AZ')
+    const [lang, setLang] = useState('en-US')
     const [speechStatus, setSpeechStatus] = useState<SpeechStatus>('idle')
     const [interimTranscript, setInterimTranscript] = useState('')
 
